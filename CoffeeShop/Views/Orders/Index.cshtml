@@ -1,0 +1,78 @@
+<section class="page-banner small">
+    <div class="banner-overlay"></div>
+    <div class="container text-center">
+        <h1>Orders</h1>
+    </div>
+</section>
+
+<div class="container py-5">
+@model List<Order>
+@{
+    ViewData["Title"] = "Đơn hàng";
+    var successMessage = TempData["successMessage"]?.ToString();
+}
+
+<h1 class="mb-4">Đơn hàng</h1>
+
+@if (!string.IsNullOrWhiteSpace(successMessage))
+{
+    <div class="alert alert-success">@successMessage</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Chưa có đơn hàng nào.
+    </div>
+
+    <a asp-controller="Products" asp-action="Index" class="btn btn-coffee">
+        Mua hàng
+    </a>
+}
+else
+{
+    @foreach (var order in Model)
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-coffee text-white">
+                Đơn hàng #@order.Id
+            </div>
+
+            <div class="card-body">
+                <p><strong>Khách hàng:</strong> @order.CustomerName</p>
+                <p><strong>SĐT:</strong> @order.Phone</p>
+                <p><strong>Địa chỉ:</strong> @order.Address</p>
+                <p><strong>Ngày đặt:</strong> @order.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in order.Items)
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Price.ToString("N0") đ</td>
+                                <td>@item.Total.ToString("N0") đ</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <h4 class="text-end">
+                    Tổng tiền: <span class="text-coffee">@order.Total.ToString("N0") đ</span>
+                </h4>
+            </div>
+        </div>
+    }
+}
+
+</div>

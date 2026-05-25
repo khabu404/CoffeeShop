@@ -1,0 +1,57 @@
+@model List<Product>
+@{
+    ViewData["Title"] = "Shop";
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+    string? currentCategory = ViewBag.CurrentCategory as string;
+}
+
+<section class="page-banner">
+    <div class="banner-overlay"></div>
+    <div class="container text-center">
+        <h1>Shop</h1>
+    </div>
+</section>
+
+<section class="shop-section">
+    <div class="container">
+        <div class="section-heading text-center">
+            <p>The secret to a perfect cup , every time...</p>
+        </div>
+
+        <div class="filter-template text-center mb-4">
+            <a class="@(string.IsNullOrWhiteSpace(currentCategory) ? "active" : "")"
+               asp-controller="Products" asp-action="Shop">All</a>
+
+            @foreach (var category in categories)
+            {
+                <a class="@(currentCategory == category ? "active" : "")"
+                   asp-controller="Products"
+                   asp-action="Shop"
+                   asp-route-category="@category">@category</a>
+            }
+        </div>
+
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="template-product">
+                        <a asp-controller="Products" asp-action="Detail" asp-route-id="@item.Id">
+                            <img src="@item.ImageUrl" alt="@item.Name" />
+                        </a>
+
+                        <div class="template-product-body">
+                            <a asp-controller="Products" asp-action="Detail" asp-route-id="@item.Id">
+                                <h5>@item.Name</h5>
+                            </a>
+                            <p>@item.Price.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</p>
+                            <a class="btn btn-gold btn-sm" asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id">
+                                Add to cart 🛒
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

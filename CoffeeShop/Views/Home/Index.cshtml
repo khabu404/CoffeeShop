@@ -1,0 +1,47 @@
+@model List<Product>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="hero-template">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content text-center">
+        <h1>The daily grind coffee house</h1>
+        <p>Where every cup is a fresh brew of perfection</p>
+        <a class="btn btn-gold" asp-controller="Products" asp-action="Shop">
+            Shop now 🛒
+        </a>
+    </div>
+</section>
+
+<section class="top-selling">
+    <div class="container">
+        <div class="section-heading text-center">
+            <h2>Top Selling</h2>
+            <p>Make your mornings better with our top-selling product.</p>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var item in Model.Take(3))
+            {
+                <div class="col-md-4">
+                    <div class="template-product">
+                        <a asp-controller="Products" asp-action="Detail" asp-route-id="@item.Id">
+                            <img src="@item.ImageUrl" alt="@item.Name" />
+                        </a>
+
+                        <div class="template-product-body">
+                            <a asp-controller="Products" asp-action="Detail" asp-route-id="@item.Id">
+                                <h5>@item.Name</h5>
+                            </a>
+                            <p>@item.Price.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</p>
+                            <a class="btn btn-gold btn-sm" asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id">
+                                Add to cart 🛒
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

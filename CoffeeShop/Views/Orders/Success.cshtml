@@ -1,0 +1,61 @@
+<section class="page-banner small">
+    <div class="banner-overlay"></div>
+    <div class="container text-center">
+        <h1>Success</h1>
+    </div>
+</section>
+
+<div class="container py-5">
+@model Order
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        Đặt hàng thành công
+    </div>
+
+    <div class="card-body">
+        <h2>Cảm ơn bạn đã đặt hàng tại CoffeeShop!</h2>
+
+        <p><strong>Mã đơn:</strong> #@Model.Id</p>
+        <p><strong>Khách hàng:</strong> @Model.CustomerName</p>
+        <p><strong>Số điện thoại:</strong> @Model.Phone</p>
+        <p><strong>Địa chỉ:</strong> @Model.Address</p>
+        <p><strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+
+        <table class="table table-bordered mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price.ToString("N0") đ</td>
+                        <td>@item.Total.ToString("N0") đ</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h3 class="text-end">
+            Tổng tiền: <span class="text-coffee">@Model.Total.ToString("N0") đ</span>
+        </h3>
+
+        <a class="btn btn-coffee" asp-controller="Products" asp-action="Index">
+            Tiếp tục mua hàng
+        </a>
+    </div>
+</div>
+
+</div>

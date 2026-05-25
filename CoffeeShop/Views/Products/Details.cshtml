@@ -1,0 +1,35 @@
+@model Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<section class="detail-template">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <img src="@Model.ImageUrl" class="detail-image" alt="@Model.Name" />
+            </div>
+
+            <div class="col-lg-6">
+                <h1>@Model.Name</h1>
+                <p class="detail-text">
+                    @Model.Description Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Aenean commodo ligula eget dolor. CoffeeShop luôn mang đến hương vị thơm ngon,
+                    đậm đà và phù hợp cho mọi buổi sáng.
+                </p>
+
+                <div class="detail-price">
+                    @Model.Price.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))
+                </div>
+
+                <a class="btn btn-gold mt-3" asp-controller="Cart" asp-action="Add" asp-route-id="@Model.Id">
+                    Add to cart 🛒
+                </a>
+
+                <a class="btn btn-outline-dark mt-3" asp-controller="Products" asp-action="Shop">
+                    Back to shop
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

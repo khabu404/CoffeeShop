@@ -1,0 +1,82 @@
+<section class="page-banner small">
+    <div class="banner-overlay"></div>
+    <div class="container text-center">
+        <h1>Checkout</h1>
+    </div>
+</section>
+
+<div class="container py-5">
+@model CheckoutViewModel
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<h1 class="mb-4">Thanh toán</h1>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-coffee text-white">
+                Thông tin khách hàng
+            </div>
+
+            <div class="card-body">
+                <form asp-controller="Orders" asp-action="Checkout" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="CustomerName" class="form-label"></label>
+                        <input asp-for="CustomerName" class="form-control" />
+                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Phone" class="form-label"></label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label"></label>
+                        <textarea asp-for="Address" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-coffee">
+                        Đặt hàng
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                Đơn hàng của bạn
+            </div>
+
+            <div class="card-body">
+                @foreach (var item in Model.CartItems)
+                {
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>@item.ProductName x @item.Quantity</span>
+                        <strong>@item.Total.ToString("N0") đ</strong>
+                    </div>
+                }
+
+                <h4 class="mt-3 text-end">
+                    Tổng: <span class="text-coffee">@Model.Total.ToString("N0") đ</span>
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" optional="true" />
+}
+
+</div>

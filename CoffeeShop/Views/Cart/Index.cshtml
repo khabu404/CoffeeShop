@@ -1,0 +1,99 @@
+@model List<CartItem>
+@{
+    ViewData["Title"] = "Cart";
+    decimal total = Model.Sum(x => x.Total);
+    var successMessage = TempData["successMessage"]?.ToString();
+    var errorMessage = TempData["errorMessage"]?.ToString();
+}
+
+<section class="page-banner small">
+    <div class="banner-overlay"></div>
+    <div class="container text-center">
+        <h1>Cart</h1>
+    </div>
+</section>
+
+<div class="container py-5">
+    @if (!string.IsNullOrWhiteSpace(successMessage))
+    {
+        <div class="alert alert-success">@successMessage</div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            Giỏ hàng của bạn đang trống.
+        </div>
+
+        <a asp-controller="Products" asp-action="Shop" class="btn btn-gold">
+            Continue shopping
+        </a>
+    }
+    else
+    {
+        <table class="table table-bordered table-hover bg-white align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th style="width: 180px;">Quantity</th>
+                    <th>Total</th>
+                    <th style="width: 100px;">Remove</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.ImageUrl" width="80" height="60" class="rounded" style="object-fit: cover;" />
+                        </td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Price.ToString("N0") đ</td>
+                        <td>
+                            <form asp-controller="Cart" asp-action="Update" method="post" class="d-flex gap-2">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="0" class="form-control" />
+                                <button type="submit" class="btn btn-sm btn-gold">Update</button>
+                            </form>
+                        </td>
+                        <td>@item.Total.ToString("N0") đ</td>
+                        <td>
+                            <a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductId"
+                               class="btn btn-danger btn-sm">
+                                Xóa
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <a asp-controller="Products" asp-action="Shop" class="btn btn-outline-secondary">
+                Continue shopping
+            </a>
+
+            <div>
+                <a asp-controller="Cart" asp-action="Clear" class="btn btn-outline-danger">
+                    Clear cart
+                </a>
+
+                <a asp-controller="Orders" asp-action="Checkout" class="btn btn-gold">
+                    Checkout
+                </a>
+            </div>
+        </div>
+
+        <h3 class="text-end mt-4">
+            Total: <span class="gold-text">@total.ToString("N0") đ</span>
+        </h3>
+    }
+</div>
